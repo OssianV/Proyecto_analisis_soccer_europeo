@@ -10,70 +10,18 @@ Abstract: [PENDIENTE] - Poner un resumen del proyecto de un parrafo y pocas orac
 
 En esta seccion vamos a planear que es lo que se tiene que hacer, ademas de asignar tareas individuales a cada quien. Usaremos checkboxes de markdown para llevar control de que tareas se han terminado y cuales siguien pendientes. Para marcar una como completado, simplemente agreguen una "x" dentro de los corchetes. Ademas, se agregra una seccion de implementaciones **extra**, que estaria chido agregar al proyecto, aunque no son escenciales.
 
-### Tareas
-
-Lo primero que tenemos que hacer es entender la base de datos; saber exactamente que informacion contiene. Para esto, hay que analisar cada una de las tablas que estan contenidas en ella. Esto implica saber que es lo que se mide en cada una de las columnas; cantidad de tiros? cantidad de goles? cantidad de pases? alguna estadistica mas rebuscada?
-
-Es importante definir cada una de estas. Como este trabajo es colaborativo, habra que registrar el analisis para que los demas podamos entender. Esto se hara en la [Libreta_resumen_bd](/SCRIPTS/Libreta_resumen_bd.ipynb). Como la base de datos tiene 7 tablas, se me ocurrio dividir esto en dos:
-
-- Documentar tabla `Match` - 115 columnas
-- Documentar las tablas:
-    - `Player` - 7
-    - `Player_Attributes` - 42
-    - `Team` - 5
-    - `Team_Attributes` - 25
-    - `Country` - 2
-    - `League`- 3
-
-Esto se hara entre dos personas; idealmente los que mas familiaridad tengan con el deporte.
-
-Por el momento, parece que la base de datos es lo suficientemente extensa para escoger distintas direcciones para nuestro analisis. Esto es, podemos enfocarnos en algunos aspectos concretos y desarrollar todo el analisis sobre ello. Por ejemplo, enfocarnos en hacer un analisis de jugadores, asi omitiendo la perspectiva de los equipos. 
-
-Debido a la variedad de posibilidades, cada quien debera plantear una direccion de como dirigir el analisis. Enfocarse en estadisticas de resultados por equipo? Enfocarse en una liga en concreto? Enfocarse en jugadores? Centrarnos en algunos atributos de los jugadores? Buscar relaciones entre la efectividad de los jugadores y los equipos en los que juegan? - Preguntas dirigidas, pero cuya respuesta no la de una grafica o estadistico en concreto.
-
-Cada quien planteara uno de estos analisis. Ya veremos si hacemos uno, varios u todos.
-
-Una vez que definamos el/los enfoque(s) de nuestro(s) analisis, podremos proceder a completar la [Libreta_resumen_bd](/SCRIPTS/Libreta_resumen_bd.ipynb) al especificar que columnas son de nuestro interes o no. Esto con el objetivo de modificar las queries que hagamos a la base de datos, asi solo traernos la informacion que nos sea relevante.
-
-A partir de aqui, lo que hagamos dependera de el enfoque del analisis, por lo cual ya no podemos planear por adelantado.
-
 #### Direccion del analisis
 
-> Ossian
+La direccion de analisis es la de obtener insights relevantes que podamos dar a un director tecnico o al personal que se encarga de hacer scouting de un equipo de futbol europeo.
 
-Se me ocurrio plantear una direccion de analisis donde nos enfocaremos en obtener insights relevantes que podamos dar a un director tecnico de una partido. 
+Nos centraremos en analizar y generar sugerencias del tipo de jugador a scoutear, de las formacion a usar, de las mejores formas de identificar un jugador valioso, de los atributos de jugadores que mayor impacto tienen en ganar un partido, etc. El analisis entonces podra incluir observaciones hechas a travez de las diferentes ligas que se incluyen en el dataset.
 
-Nos centraremos en analizar y generar sugerencias del tipo de jugador a scouter, de las formacion a usar, de las mejores formas de identificar un jugador valioso, de los atributos de jugadores que mayor impacto tienen en ganar un partido, etc. El analisis entonces podra incluir observaciones hechas a travez de las diferentes ligas que se incluyen en el dataset.
-
-#### Ideas para analisis
-
-Hay que hacer minimo 8 graficos diferentes, a continuacion ponemos una lista de algunas opciones (marquen adecuadamente si ya se hizo una isntancia de dicho tipo de grafico)
-
-- [x] Heatmap
-- [ ] Bubble plot
-- [x] Bar chart
-- [ ] Stacked bar chart
-- [ ] Pie chart
-- [ ] Ring chart
-- [x] Boxplot
-- [ ] Time series
-- [x] Histogram
-- [x] Ring plot
-- [ ] Violin plot
-- [ ] Waffle plot
-- [ ] Bubble plot
-- [ ] Styled table
-- [ ] Scatter plot
-- [ ] Circular barplot
-- [ ] Radar chart
-
-Plantee 20 ideas de analisis que pueden hacer, y los graficos que se usarian para responderlo. Pueden checarlas [aqui](Libreta_planteamiento_de_insights.ipynb). Leeanlo y seleccionen acordemente (recuerden que debe hacer 8 tipos de graficos diferentes minimo).
 
 ### Extras
 
 Estaria interesante hacer mas de lo necesario. Es por eso que aqui pondre ideas que estaria chido llevar a cabo.
 
-> Notese que nada de esto fue solicitado por el profe
+> Notese que nada de esto fue solicitado por el profe.
 
 - [ ] Crear un dashboard ejecutivo.
 - [ ] Hacer analisis usando algoritmos de machine learning basicos (regresion lineal, clasficacion, arboles de desicion, etc.)
@@ -83,49 +31,32 @@ Estaria interesante hacer mas de lo necesario. Es por eso que aqui pondre ideas 
 
 Ossian:
 
-- [x] Plantear una direccion del analisis.
-- [x] Documentar tabla `Match`.
-- [x] Documentar las tablas:
-        - `Player`
-        - `Player_Attributes`
-        - `Team`
-        - `Team_Attributes`
-        - `Country`
-        - `League`
-- [x] Preparar los ~~tres~~dos dataframes que se usaran para la generacion de graficos
-    - [x] df_player_latest
-    - [x] df_match_base
-    - [ ] ~~df_tean_match~~
-- [ ] Hacer los 4 analisis que me tocan:
-    - [x] Analisis 1: Idea 01 - Heatmap de correlacion entre atributos de jugadores de campo
-    - [x] Analisis 2: Idea 02 - Heatmap de correlacion entre atributos de jugadores porteros
-    - [x] Analisis 3: Idea 03 - Histograma del gap potencial - overall rating jugadores de campo
-    - [ ] Analisis 4: Idea 03 - Histograma del gap potencial - overall rating jugadores porteros
-    - [x] Analisis 4: Grafico de barras de atributos de jugadores con alto potencial y overall jovenes
-    - [x] Analisis 5: Idea 20 - Grafico de anillo del margen de victoria en los partidos
-    - [ ] Analisis 6: Idea 13 - Bubble plot de formaciones: frecuencia vs rendimiento
+- [ ] Hacer mas bonita la presentacion
+- [ ] Arreglar analisis 09
+- [ ] Agregar mas analisis
 
 Estefania:
 
-- [ ] Hacer graficos para 2 insights (de preferencia 3 pls)
+- [ ] Reforzar el analisis de los analisis 5, 6, 10
 
 Ian:
 
-- [ ] Hacer graficos para 2 insights (de preferencia 3 pls)
-    - [ ] Analisis 1: Idea 07 - Histograma del margen de desarrollo de los jugadores
-    - [ ] Analisis 2: Idea 08 - Grafico de barras con atributos que separan a los jugadores mas prometedores
-    - [ ] Analisis 3: extra
+- [ ] Reforzar el analisis de los analisis 7, 8 y 9
  
 Karim:
 
-- [ ] Hacer graficos para 2 insights (de preferencia 3 pls)
+- [ ] Reforzar el analisis de los analisis 1, 2, 3 y 4
 
 ## Vinculos a archivos importantes dentro de repositporio
 
 Aqui pondre algunos hipervinculos a archivos importantes dentro del repositorio
 
 - [Libreta_sqlite_basics](SCRIPTS/Libreta_sqlite_basics.ipynb): Libreta con un tutorial basico de como leer las tablas del archivo .sqlite y pasarlas a un dataframe + un poco de teoria
-- [Libreta_resumen_bd](SCRIPTS/Libreta_resumen_bd.ipynb): Libreta resumen de la base de datos.
+- [Libreta_resumen_bd](SCRIPTS/Libreta_resumen_bd.ipynb): Libreta resumen de la base de datos, explicando que informacion contiene cada columna.
+- [Libreta_graficos_y_analisis](SCRIPTS/Libreta_graficos_y_analisis.ipynb): Libreta donde se hicieron los 10 analisis y sus graficos.
+- [Libreta_planteamiento_de_insights](SCRIPTS/Libreta_planteamiento_de_insights.ipynb): Libreta donde se plantearon los insights a realizar.
+- [Libreta_procesamiento_de_datos](SCRIPTS/Libreta_procesamiento_de_datos.ipynb): Libreta donde se hizo todo el procesado de datos.
+
 
 ## Tutoriales, articulos, documentacion relevante
 
