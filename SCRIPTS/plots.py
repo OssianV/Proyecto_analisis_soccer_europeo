@@ -50,6 +50,18 @@ plt.rcParams.update({
     "figure.dpi": 120
 })
 
+def _categorize_margin(abs_diff):
+        """Clasifica un partido segun su diferencia absoluta de goles"""
+        if abs_diff == 0:
+            return "0 (Empate)"
+        elif abs_diff == 1:
+            return "1 (Cerrado)"
+        elif abs_diff == 2:
+            return "2 (Moderado)"
+        else:
+            return "3+ (Amplio)"
+
+
 def plot_analisis_01(df_player_latest_imputed: pd.DataFrame):
     """Genera el heatmap de correlacion de atributos para jugadores de campo"""
 
@@ -98,12 +110,12 @@ def plot_analisis_01(df_player_latest_imputed: pd.DataFrame):
         for j in range(len(labels)):
             value = corr.values[i, j]
             color = "white" if abs(value) >= 0.60 else "black"
-            text = ax.text(j, i, f"{value:.2f}", ha = "center", va = "center", color = color, fontsize = 8)
+            ax.text(j, i, f"{value:.2f}", ha = "center", va = "center", color = color, fontsize = 8)
 
-    ax.set_title("Correlacion de atributos de jugadores de campo", loc = "left", pad = 15)
+    ax.set_title("Correlación de atributos de jugadores de campo", loc = "left", pad = 15)
     ax.tick_params(length = 0)
     cbar = plt.colorbar(im, ax = ax, shrink=0.85)
-    cbar.set_label("Correlacion de Spearman")
+    cbar.set_label("Correlación de Spearman")
 
     fig.tight_layout()
     return fig
@@ -149,13 +161,13 @@ def plot_analisis_02(df_player_latest_imputed: pd.DataFrame):
         for j in range(len(labels)):
             value = corr.values[i, j]
             color = "white" if abs(value) >= 0.60 else "black"
-            text = ax.text(j, i, f"{value:.2f}", ha = "center", va = "center", color = color, fontsize = 8)
+            ax.text(j, i, f"{value:.2f}", ha = "center", va = "center", color = color, fontsize = 8)
 
-    ax.set_title("Correlacion de atributos de jugadores de campo", loc = "left", pad = 15)
+    ax.set_title("Correlación de atributos de jugadores porteros", loc = "left", pad = 15)
     ax.tick_params(length = 0)
 
     cbar = plt.colorbar(im, ax = ax, shrink = 0.85)
-    cbar.set_label("Correlacion de Spearman")
+    cbar.set_label("Correlación de Spearman")
 
     fig.tight_layout()
     return fig
@@ -163,10 +175,7 @@ def plot_analisis_02(df_player_latest_imputed: pd.DataFrame):
 def plot_analisis_03(df_player_latest_imputed: pd.DataFrame):
     """Genera el histograma del gap de desarrollo para jugadores de campo jovenes"""
 
-    # Calculamos la edad de los jugadores con la misma referencia que ya venian usando
-    fecha_actual = pd.Timestamp("2016-01-01")
     df_gap = df_player_latest_imputed.copy()
-    df_gap["AGE"] = (fecha_actual - df_gap["BIRTHDAY"]).dt.days / 365.25
 
     # Filtramos solo jugadores jovenes
     df_gap = df_gap[df_gap["AGE"] < 23].copy()
@@ -192,7 +201,7 @@ def plot_analisis_03(df_player_latest_imputed: pd.DataFrame):
 
     ax.hist(df_gap_outfield["GAP"].dropna(), bins = bins_outfield, color = COLOR_PRINCIPAL, **hist_style)
 
-    ax.set_title("Distribucion del gap de desarrollo en jugadores de campo jovenes (<=23)", fontsize = 16, fontweight = "bold", pad = 18)
+    ax.set_title("Distribución del gap de desarrollo en jugadores de campo jóvenes (<=23)", fontsize = 16, fontweight = "bold", pad = 18)
     ax.set_xlabel("Gap de desarrollo (Potential - Overall Rating)", fontsize = 12)
     ax.set_ylabel("Numero de jugadores", fontsize = 12)
     ax.grid(axis = "y", alpha = 0.2, linestyle = "--", linewidth = 0.8)
@@ -211,10 +220,7 @@ def plot_analisis_03(df_player_latest_imputed: pd.DataFrame):
 def plot_analisis_04(df_player_latest_imputed: pd.DataFrame):
     """Genera el histograma del gap de desarrollo para porteros jovenes"""
 
-    # Calculamos la edad de los jugadores con la misma referencia que ya venian usando
-    fecha_actual = pd.Timestamp("2016-01-01")
     df_gap = df_player_latest_imputed.copy()
-    df_gap["AGE"] = (fecha_actual - df_gap["BIRTHDAY"]).dt.days / 365.25
 
     # Filtramos solo jugadores jovenes
     df_gap = df_gap[df_gap["AGE"] < 23].copy()
@@ -229,7 +235,7 @@ def plot_analisis_04(df_player_latest_imputed: pd.DataFrame):
     gk_min = int(df_gap_gk["GAP"].min())
     gk_max = int(df_gap_gk["GAP"].max())
 
-    bins_gk = np.arange(gk_min - 0.5, gk_max + 1.5, 1)
+    bins_gk = np.arange(gk_min - 0.5, gk_max + 0.5, 1)
     x_ticks = np.arange(gk_min, gk_max + 1, 1)
 
     # Estilo base del histograma
@@ -240,9 +246,9 @@ def plot_analisis_04(df_player_latest_imputed: pd.DataFrame):
 
     ax.hist(df_gap_gk["GAP"].dropna(), bins = bins_gk, color = COLOR_SECUNDARIO, **hist_style)
 
-    ax.set_title("Distribucion del gap de desarrollo en porteros jovenes (<=23)", fontsize = 16, fontweight = "bold", pad = 18)
+    ax.set_title("Distribución del gap de desarrollo en porteros jóvenes (<=23)", fontsize = 16, fontweight = "bold", pad = 18)
     ax.set_xlabel("Gap de desarrollo (Potential - Overall Rating)", fontsize = 12)
-    ax.set_ylabel("Numero de porteros", fontsize = 12)
+    ax.set_ylabel("Número de porteros", fontsize = 12)
     ax.grid(axis = "y", alpha = 0.2, linestyle = "--", linewidth = 0.8)
 
     ax.set_xlim(gk_min - 0.5, gk_max + 0.5)
@@ -265,17 +271,12 @@ def plot_analisis_04(df_player_latest_imputed: pd.DataFrame):
     return fig
 
 def plot_analisis_05(df_player_latest_imputed: pd.DataFrame):
-    """Genera el grafico de barras de atributos que distinguen a jugadores jovenes de alto potencial"""
+    """Genera el grafico de barras de atributos que distinguen a jugadores de campo jovenes de alto potencial"""
 
     # Nos quedamos solo con jugadores de campo jovenes
     df_young = df_player_latest_imputed.copy()
-    df_young = df_young[df_young["PLAYER_TYPE"] == "OUTFIELD"].copy()
-
-    # Calculamos edad aproximada al momento del snapshot
-    df_young["AGE"] = ((df_young["DATE"] - df_young["BIRTHDAY"]).dt.days / 365).round(1)
-
-    # Filtramos jugadores jovenes
-    df_young = df_young[df_young["AGE"].between(18, 23)].copy()
+    df_young = df_young[df_young["PLAYER_TYPE"] == "OUTFIELD"]
+    df_young = df_young[df_young["AGE"].between(18, 23)]
 
     # Seleccionamos atributos de jugadores de campo
     attr_cols = [
@@ -311,24 +312,25 @@ def plot_analisis_05(df_player_latest_imputed: pd.DataFrame):
 
     # Definimos el grupo de alto potencial como el top 20 por ciento
     potential_cutoff = df_young["POTENTIAL"].quantile(0.80)
-
     df_high_potential = df_young[df_young["POTENTIAL"] >= potential_cutoff].copy()
+
+    # Definimos el grupo de referencia como el resto de jugadores jovenes
     df_reference = df_young[df_young["POTENTIAL"] < potential_cutoff].copy()
 
     # Calculamos diferencia de promedios por atributo
     mean_diff = df_high_potential[attr_cols].mean() - df_reference[attr_cols].mean()
 
     # Nos quedamos con los 12 atributos que mas distinguen al grupo
-    mean_diff = mean_diff.sort_values(ascending=False).head(12).sort_values()
+    mean_diff = mean_diff.sort_values(ascending=False).head(12).sort_values(ascending=True)
 
     # Preparamos labels y colores
     labels = [col.replace("_", " ") for col in mean_diff.index]
 
-    bar_colors = [COLOR_PRINCIPAL] * len(mean_diff)
+    bar_colors = [COLOR_PRINCIPAL] * len(mean_diff)    # Generamos la lista de colores usando list comprehension
     if len(bar_colors) >= 3:
-        bar_colors[-1] = COLOR_RESALTE
-        bar_colors[-2] = COLOR_RESALTE
-        bar_colors[-3] = COLOR_SECUNDARIO
+        bar_colors[-1] = COLOR_RESALTE    # Resaltamos el atributo que mas distigue al grupo
+        bar_colors[-2] = COLOR_RESALTE    # Resaltamos el 2do atributo que mas distingue al grupo
+        bar_colors[-3] = COLOR_SECUNDARIO    # Resaltamos el 3er atributo que mas distingue al grupo, con un nivel de resalte menor al 1ro y 2do
 
     # Graficamos
     fig, ax = plt.subplots(figsize = (10, 7))
@@ -336,20 +338,17 @@ def plot_analisis_05(df_player_latest_imputed: pd.DataFrame):
 
     # Agregamos el valor al final de cada barra
     for bar, value in zip(bars, mean_diff.values):
-        ax.text(value + 0.25, bar.get_y() + bar.get_height() / 2, f"{value:.1f}", va = "center", fontsize = 9)
+        ax.text(value + 0.25, bar.get_y() + bar.get_height() / 2, f"{value:.1f}", va = "center", fontsize = 9)    # .get_y obtiene el piso, .get_height()/2 lo centra verticalmente
 
-    ax.axvline(0, color = COLOR_NEUTRO, linewidth = 1.2)
-
-    ax.set_title("Atributos que mas distinguen a jugadores jovenes (18-23) de alto potencial", loc = "left", pad = 15)
-    ax.set_xlabel("Diferencia de promedio frente al grupo de referencia")
+    ax.set_title("Atributos que mas distinguen a jugadores jóvenes (18-23) de alto potencial (mejor 20%)", loc = "left", pad = 15)
+    ax.set_xlabel("Diferencia de promedio frente al grupo de referencia (peor 80%)")
     ax.set_ylabel("")
     ax.grid(axis = "x")
-    ax.tick_params(axis = "y", length = 0)
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
-    ax.text(0.98, 0.03, f"Edad: 18 a 23 anos\nTop 20% en potential\nCorte: {potential_cutoff:.0f}\n# alto potencial: {len(df_high_potential)}", transform = ax.transAxes, ha = "right", va = "bottom", fontsize = 9)
+    ax.text(0.98, 0.03, f"Edad: 18 a 23 años\nTop 20% en potential\nCorte: {potential_cutoff:.0f}\n# alto potencial: {len(df_high_potential)}", transform = ax.transAxes, ha = "right", va = "bottom", fontsize = 9)
 
     fig.tight_layout()
     return fig
@@ -359,25 +358,14 @@ def plot_analisis_06(df_team_match: pd.DataFrame):
 
     # Nos quedamos con un solo registro por partido
     df_matches = df_team_match[df_team_match["IS_HOME"] == 1].copy()
+    df_matches = df_matches.dropna(subset = ["ABS_GOAL_DIFF"])
 
-    # Se define categorias segun el margen absoluto de goles
-    def categorizar_margen(abs_diff):
-        """Clasifica un partido segun su diferencia absoluta de goles"""
-        if abs_diff == 0:
-            return "0 (Empate)"
-        elif abs_diff == 1:
-            return "1 (Cerrado)"
-        elif abs_diff == 2:
-            return "2 (Moderado)"
-        else:
-            return "3+ (Amplio)"
-
-    df_matches["MARGEN_CATEGORIA"] = df_matches["ABS_GOAL_DIFF"].apply(categorizar_margen)
+    df_matches["MARGIN"] = df_matches["ABS_GOAL_DIFF"].apply(_categorize_margin)
 
     # Se cuentan frecuencias y calculamos porcentajes
     margin_order = ["0 (Empate)", "1 (Cerrado)", "2 (Moderado)", "3+ (Amplio)"]
 
-    margin_counts = (df_matches["MARGEN_CATEGORIA"].value_counts().reindex(margin_order, fill_value = 0))
+    margin_counts = (df_matches["MARGIN"].value_counts().reindex(margin_order, fill_value = 0))
 
     margin_pct = margin_counts / margin_counts.sum() * 100
 
@@ -386,9 +374,10 @@ def plot_analisis_06(df_team_match: pd.DataFrame):
         "0 (Empate)": "Empate\n(0 goles de diferencia)",
         "1 (Cerrado)": "Cerrado\n(1 gol de diferencia)",
         "2 (Moderado)": "Moderado\n(2 goles de diferencia)",
-        "3+ (Amplio)": "Amplio\n(3 o mas goles de diferencia)"
+        "3+ (Amplio)": "Amplio\n(3 o más goles de diferencia)"
     }
 
+    # Usamos list comprehension para generar las etiquetas para cada categoria, incluyendo el conteo de partidos
     labels = [f"{label_map[categoria]}\n{margin_counts.loc[categoria]:,} partidos" for categoria in margin_order]
 
     # Se fijan colores para que el grafico sea consistente con la paleta de colores seleccionada
@@ -404,7 +393,7 @@ def plot_analisis_06(df_team_match: pd.DataFrame):
         startangle = 90,
         counterclock = False,
         colors = donut_colors,
-        wedgeprops = dict(width = 0.40, edgecolor = "white", linewidth = 2.5),
+        wedgeprops = dict(width = 0.40, edgecolor = "white", linewidth = 2.5),    # Este parametro hace que el grafico de pie se convierta en uno de anillo
         pctdistance = 0.78,
         labeldistance = 1.12,
         textprops = dict(fontsize = 10, fontweight = "bold", color = COLOR_TEXTO)
@@ -420,26 +409,23 @@ def plot_analisis_06(df_team_match: pd.DataFrame):
     ax.text(0, 0, f"Total\n{int(margin_counts.sum()):,}\npartidos", ha = "center", va = "center", fontsize = 12, fontweight = "bold", color = COLOR_TEXTO)
 
     # Titulo
-    ax.set_title("Distribucion del margen de victoria en los partidos", fontsize = 15, fontweight = "bold", pad = 20)
+    ax.set_title("Distribución del margen de victoria en los partidos", fontsize = 15, fontweight = "bold", pad = 20)
 
     plt.tight_layout()
     return fig
 
 def plot_analisis_07(df_player_latest_imputed: pd.DataFrame):
-    """Genera el boxplot de atributos para altas promesas frente al resto de jugadores jovenes"""
+    """Genera el boxplot de atributos para altas promesas de campo frente al resto de jugadores jovenes"""
 
     # Definimos los colores (rosa para las promesas, gris para el resto)
-    paleta_boxplot = {"Alta Promesa (Top 10%)": COLOR_PRINCIPAL, "Resto de Jovenes": COLOR_NEUTRO}
+    paleta_boxplot = {"Alta Promesa (Top 10%)": COLOR_RESALTE, "Resto de Jovenes": COLOR_PRINCIPAL}
 
     # Nos quedamos solo con jugadores de campo jovenes
     df_young = df_player_latest_imputed.copy()
-    df_young = df_young[df_young["PLAYER_TYPE"] == "OUTFIELD"].copy()
-
-    # Calculamos edad aproximada al momento del snapshot
-    df_young["AGE"] = ((df_young["DATE"] - df_young["BIRTHDAY"]).dt.days / 365).round(1)
+    df_young = df_young[df_young["PLAYER_TYPE"] == "OUTFIELD"]
 
     # Filtramos para comparar solo jugadores jovenes (<= 23 años)
-    df_young = df_young[df_young["AGE"] <= 23].copy()
+    df_young = df_young[df_young["AGE"] <= 23]
 
     # Definimos el umbral del Top 10% de potencial
     umbral_top = df_young["POTENTIAL"].quantile(0.90)
@@ -462,7 +448,7 @@ def plot_analisis_07(df_player_latest_imputed: pd.DataFrame):
     sns.boxplot(data=df_melted, x="ATRIBUTO", y="PUNTUACION", hue="PROSPECT_LEVEL", palette=paleta_boxplot, ax=ax)
 
     # Titulos y etiquetas
-    ax.set_title("Distribucion de atributos de jugadores de campo: Altas Promesas vs Resto de Jovenes (<= 23 años)", loc="left", pad=15)
+    ax.set_title("Distribucion de atributos de jugadores de campo: Altas Promesas vs Resto de Jóvenes (<= 23 años)", loc="left", pad=15)
     ax.set_xlabel("Atributos Evaluados")
     ax.set_ylabel("Puntuacion del Atributo")
 

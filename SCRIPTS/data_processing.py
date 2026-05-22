@@ -218,11 +218,14 @@ def build_processed_dataframes(database_path: str):
         df_player_latest["IS_GOALKEEPER"] = df_player_latest["GK_MEAN"] >= threshold_gk_value
         df_player_latest["PLAYER_TYPE"] = np.where(df_player_latest["IS_GOALKEEPER"], "GOALKEEPER", "OUTFIELD")
 
+        # Agregamos la columna de edad de los jugadores
+        df_player_latest["AGE"] = (df_player_latest["DATE"] - df_player_latest["BIRTHDAY"]).dt.days / 365.25
+
         # Ahora definimos una copia donde resolveremos la presencia de nan
         df_player_latest_imputed = df_player_latest.copy()
 
         # Eliminamos filas sin overall o potential (son demasiado importantes)
-        df_player_latest_imputed = (df_player_latest_imputed.dropna(subset=["OVERALL_RATING", "POTENTIAL"]).reset_index(drop=True))
+        df_player_latest_imputed = (df_player_latest_imputed.dropna(subset=["OVERALL_RATING", "POTENTIAL", "AGE"]).reset_index(drop=True))
 
         # Definimos las columnas categoricas a imputar
         categorical_columns = ["PREFERRED_FOOT", "ATTACKING_WORK_RATE", "DEFENSIVE_WORK_RATE"]
