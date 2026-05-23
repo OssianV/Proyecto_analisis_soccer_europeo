@@ -16,6 +16,13 @@ COLOR_SECUNDARIO = "2A9D8F"
 COLOR_ALERTA = "D95D39"
 COLOR_NEUTRO = "8D99AE"
 
+# Mejor forma de manejar direcciones de archivos
+
+script_dir = Path(__file__).resolve().parent
+project_root = script_dir.parent
+
+database_path = project_root / "INPUTS" / "database.sqlite"
+output_path = project_root / "OUTPUTS" / "presentacion_final.pptx"
 
 def rgb(hex_color):
     hex_color = hex_color.replace("#", "")
@@ -180,7 +187,7 @@ def crear_presentacion(output_path, analyses, integrantes):
 
 if __name__ == "__main__":
 
-    grafico_01, grafico_02, grafico_03, grafico_04, grafico_05, grafico_06, grafico_07, grafico_08, grafico_09, grafico_10 = build_graph_figures("../INPUTS/database.sqlite") 
+    grafico_01, grafico_02, grafico_03, grafico_04, grafico_05, grafico_06, grafico_07, grafico_08, grafico_09, grafico_10 = build_graph_figures(database_path) 
 
     analyses = [
         {
@@ -285,7 +292,7 @@ También están las formaciones más conservadoras, que tienden a empatar mucho:
     ]
 
     crear_presentacion(
-        output_path="presentacion_final.pptx",
+        output_path=output_path,
         analyses=analyses,
         integrantes=integrantes
     )

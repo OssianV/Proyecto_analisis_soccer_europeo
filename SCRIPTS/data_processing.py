@@ -219,7 +219,7 @@ def build_processed_dataframes(database_path: str):
         df_player_latest["PLAYER_TYPE"] = np.where(df_player_latest["IS_GOALKEEPER"], "GOALKEEPER", "OUTFIELD")
 
         # Agregamos la columna de edad de los jugadores
-        df_player_latest["AGE"] = (df_player_latest["DATE"] - df_player_latest["BIRTHDAY"]).dt.days / 365.25
+        df_player_latest["AGE"] = np.floor((df_player_latest["DATE"] - df_player_latest["BIRTHDAY"]).dt.days / 365.25).astype("Int64")
 
         # Ahora definimos una copia donde resolveremos la presencia de nan
         df_player_latest_imputed = df_player_latest.copy()
@@ -245,7 +245,7 @@ def build_processed_dataframes(database_path: str):
         }
 
         # Definimos las columnas numericas donde si debemos imputar nan
-        numerical_columns_with_na = [col for col in df_player_latest_imputed.columns if df_player_latest_imputed[col].isna().any() and isinstance(df_player_latest_imputed[col].iloc[0], (int, float)) and col not in numerical_columns_to_exclude]
+        numerical_columns_with_na = [col for col in df_player_latest_imputed.columns if df_player_latest_imputed[col].isna().any() and np.issubdtype(df_player_latest_imputed[col].dtype, np.number) and col not in numerical_columns_to_exclude]
 
         # Imputamos columnas numericas con la mediana por tipo de jugador
         df_player_latest_imputed = _impute_numeric_nan_with_median(df_player_latest_imputed, numerical_columns_with_na, "PLAYER_TYPE")

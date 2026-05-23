@@ -462,19 +462,17 @@ def plot_analisis_07(df_player_latest_imputed: pd.DataFrame):
 def plot_analisis_08(df_player_latest: pd.DataFrame):
     """Genera el grafico de lineas de nivel promedio de jugador por edad"""
 
-    # Calculamos la edad entera de cada jugador
     df_player = df_player_latest.copy()
-    df_player["AGE"] = (df_player["DATE"] - df_player["BIRTHDAY"]).dt.days // 365
-
+    
     # Contamos cuantos jugadores hay por cada edad
     conteo_edades = df_player.groupby("AGE").size()
 
     # Nos quedamos solo con edades con muestra suficiente
     edades_validas = conteo_edades[conteo_edades >= 10].index
-    df_linea = df_player[df_player["AGE"].isin(edades_validas)].copy()
+    df_player = df_player[df_player["AGE"].isin(edades_validas)]
 
     # Calculamos el overall promedio por edad
-    promedio_por_edad = df_linea.groupby("AGE")["OVERALL_RATING"].mean()
+    promedio_por_edad = df_player.groupby("AGE")["OVERALL_RATING"].mean()
 
     # Graficamos
     fig, ax = plt.subplots(figsize = (10, 6))
@@ -488,7 +486,7 @@ def plot_analisis_08(df_player_latest: pd.DataFrame):
         markersize = 6
     )
 
-    ax.set_title("Nivel promedio de los jugadores segun su edad (Overall Rating)", loc = "left", pad = 15)
+    ax.set_title("Nivel promedio de los jugadores según su edad (Overall Rating)", loc = "left", pad = 15)
     ax.set_xlabel("Edad")
     ax.set_ylabel("Nivel promedio (Overall Rating)")
     ax.grid(linestyle = "--", alpha = 0.6)
@@ -594,19 +592,16 @@ def plot_analisis_10(df_team_match: pd.DataFrame):
 
     # Copiamos y limpiamos datos base
     df_form = df_team_match.copy()
-    df_form = df_form.dropna(subset = ["FORMATION", "RESULT"]).copy()
+    df_form = df_form.dropna(subset = ["FORMATION", "RESULT"])
 
-    # Normalizamos el resultado
-    df_form["RESULT"] = df_form["RESULT"].astype(str).str.upper()
-
+    # Mapeamos de letra a palabra completa
     map_result = {
-        "W": "WIN", "WIN": "WIN", "VICTORY": "WIN", "VICTORIA": "WIN",
-        "D": "DRAW", "DRAW": "DRAW", "EMPATE": "DRAW",
-        "L": "LOSS", "LOSS": "LOSS", "DEFEAT": "LOSS", "DERROTA": "LOSS"
+    "W": "WIN",
+    "D": "DRAW",
+    "L": "LOSS"
     }
 
     df_form["RESULT_CLEAN"] = df_form["RESULT"].map(map_result)
-    df_form = df_form.dropna(subset = ["RESULT_CLEAN"]).copy()
 
     # Agrupamos formaciones poco frecuentes como OTRAS
     conteo_formaciones = df_form["FORMATION"].value_counts()
@@ -618,7 +613,7 @@ def plot_analisis_10(df_team_match: pd.DataFrame):
         lambda value: value if value in formaciones_validas else "OTRAS"
     )
 
-    # Tabla de proporciones
+    # Usando crosstab analisamos la proporcion de resultados por formacion
     tabla = pd.crosstab(
         df_form["FORMATION_CLEAN"],
         df_form["RESULT_CLEAN"],
@@ -629,6 +624,7 @@ def plot_analisis_10(df_team_match: pd.DataFrame):
         if col not in tabla.columns:
             tabla[col] = 0
 
+    # Ordenamos por victorias
     tabla = tabla[["WIN", "DRAW", "LOSS"]]
     tabla = tabla.sort_values(by = "WIN", ascending = False)
 
@@ -639,21 +635,15 @@ def plot_analisis_10(df_team_match: pd.DataFrame):
 
     ax.bar(x, tabla["WIN"], label = "Victoria", color = COLOR_SECUNDARIO)
     ax.bar(x, tabla["DRAW"], bottom = tabla["WIN"], label = "Empate", color = COLOR_RESALTE)
-    ax.bar(
-        x,
-        tabla["LOSS"],
-        bottom = tabla["WIN"] + tabla["DRAW"],
-        label = "Derrota",
-        color = COLOR_ALERTA
-    )
+    ax.bar(x, tabla["LOSS"], bottom = tabla["WIN"] + tabla["DRAW"], label = "Derrota", color = COLOR_ALERTA)
 
     ax.set_xticks(x)
-    ax.set_xticklabels(tabla.index, rotation = 45, ha = "right")
+    ax.set_xticklabels(tabla.index, rotation = 90, ha = "right")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
 
-    ax.set_title("Proporcion de victorias, empates y derrotas por formacion", loc = "left", pad = 15)
-    ax.set_xlabel("Formacion")
-    ax.set_ylabel("Proporcion de resultados")
+    ax.set_title("Proporción de victorias, empates y derrotas por formación", loc = "left", pad = 15)
+    ax.set_xlabel("Formación")
+    ax.set_ylabel("Proporción de resultados")
     ax.grid(axis = "y", linestyle = "--", alpha = 0.4)
 
     ax.spines["top"].set_visible(False)
