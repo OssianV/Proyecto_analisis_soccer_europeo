@@ -4,52 +4,29 @@
 
 Abstract: [PENDIENTE] - Poner un resumen del proyecto de un parrafo y pocas oraciones.
 
-> NOTA - Por el momento, la organizacion del proyecto la llevaremos a cabo en este READ.me. Al finalizar el proyecto ya lo convertimos en un READ.me normal.
+## Estructura del proyecto
 
-## Planificacion del proyecto y trackeo de responsabilidades individuales
+El repositorio contiene dos archivos relevante importantes: (1) Scripts principales, y (2) Libretas de Jupyter secundarias.
 
-En esta seccion vamos a planear que es lo que se tiene que hacer, ademas de asignar tareas individuales a cada quien. Usaremos checkboxes de markdown para llevar control de que tareas se han terminado y cuales siguien pendientes. Para marcar una como completado, simplemente agreguen una "x" dentro de los corchetes. Ademas, se agregra una seccion de implementaciones **extra**, que estaria chido agregar al proyecto, aunque no son escenciales.
+La base de datos no esta en repositorio, para descargarla dirigase a en kaggle usando [este link.](https://www.kaggle.com/datasets/hugomathien/soccer) 
 
-#### Direccion del analisis
+### Scripts principales
 
-La direccion de analisis es la de obtener insights relevantes que podamos dar a un director tecnico o al personal que se encarga de hacer scouting de un equipo de futbol europeo.
+- [main.py](SCRIPTS/main.py)
+- [plots.py](SCRIPTS/plots.py)
+- [data_processing.py](SCRIPTS/data_processing.py)
 
-Nos centraremos en analizar y generar sugerencias del tipo de jugador a scoutear, de las formacion a usar, de las mejores formas de identificar un jugador valioso, de los atributos de jugadores que mayor impacto tienen en ganar un partido, etc. El analisis entonces podra incluir observaciones hechas a travez de las diferentes ligas que se incluyen en el dataset.
+Solo se tiene que ejectuar main.py. Este generara la presentacion final en la carpeta OUTPUTS.
 
+Notese que se realizo con la version 3.13.1 de python. Tambien asegurese de tener las librerias utilizadas instaladas. Estas deben ser:
 
-### Extras
+- pandas
+- numpy
+- matplotlib
+- seaborn
+- python-pptx
 
-Estaria interesante hacer mas de lo necesario. Es por eso que aqui pondre ideas que estaria chido llevar a cabo.
-
-> Notese que nada de esto fue solicitado por el profe.
-
-- [ ] Crear un dashboard ejecutivo.
-- [ ] Hacer analisis usando algoritmos de machine learning basicos (regresion lineal, clasficacion, arboles de desicion, etc.)
-- [ ] Crear una presentacion ejecutiva de nuestros insigths.
-
-### Asignacion de tareas
-
-Ossian:
-
-- [ ] Hacer mas bonita la presentacion
-- [ ] Arreglar analisis 09
-- [ ] Agregar mas analisis
-
-Estefania:
-
-- [ ] Reforzar el analisis de los analisis 5, 6, 10
-
-Ian:
-
-- [ ] Reforzar el analisis de los analisis 7, 8 y 9
- 
-Karim:
-
-- [ ] Reforzar el analisis de los analisis 1, 2, 3 y 4
-
-## Vinculos a archivos importantes dentro de repositporio
-
-Aqui pondre algunos hipervinculos a archivos importantes dentro del repositorio
+### Libretas de Jupyter secundarias
 
 - [Libreta_sqlite_basics](SCRIPTS/Libreta_sqlite_basics.ipynb): Libreta con un tutorial basico de como leer las tablas del archivo .sqlite y pasarlas a un dataframe + un poco de teoria
 - [Libreta_resumen_bd](SCRIPTS/Libreta_resumen_bd.ipynb): Libreta resumen de la base de datos, explicando que informacion contiene cada columna.
@@ -57,6 +34,12 @@ Aqui pondre algunos hipervinculos a archivos importantes dentro del repositorio
 - [Libreta_planteamiento_de_insights](SCRIPTS/Libreta_planteamiento_de_insights.ipynb): Libreta donde se plantearon los insights a realizar.
 - [Libreta_procesamiento_de_datos](SCRIPTS/Libreta_procesamiento_de_datos.ipynb): Libreta donde se hizo todo el procesado de datos.
 
+
+## Direccion del analisis
+
+La direccion de analisis es la de obtener insights relevantes que podamos dar a un director tecnico o al personal que se encarga de hacer scouting de un equipo de futbol europeo.
+
+Nos centraremos en analizar y generar sugerencias del tipo de jugador a scoutear, de las formacion a usar, de las mejores formas de identificar un jugador valioso, de los atributos de jugadores que mayor impacto tienen en ganar un partido, etc. El analisis entonces podra incluir observaciones hechas a travez de las diferentes ligas que se incluyen en el dataset.
 
 ## Tutoriales, articulos, documentacion relevante
 
