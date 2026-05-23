@@ -138,7 +138,6 @@ def plot_analisis_02(df_player_latest_imputed: pd.DataFrame):
         "GK_KICKING",
         "GK_POSITIONING",
         "GK_REFLEXES",
-        "GK_MEAN"
     ]
 
     # Calculamos la matriz de correlacion
@@ -569,8 +568,8 @@ def plot_analisis_09(df_team_match: pd.DataFrame):
     ax.margins(x = 0.2, y = 0.2)
 
     fig.text(
-        0.31,
-        0.02,
+        0.43,
+        0.0,
         "Tamano de burbuja = cantidad de partidos\nLas 10 formaciones mas usadas",
         ha = "center",
         fontsize = 10,

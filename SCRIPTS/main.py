@@ -87,28 +87,102 @@ def crear_presentacion(output_path, analyses, integrantes):
         slide,
         Inches(0.9), Inches(1.4),
         Inches(10.5), Inches(1.0),
-        "Analisis de datos para decisiones futbolisticas",
-        24,
+        "Análisis de datos para decisiones futbolisticas",
+        30,
         COLOR_PRINCIPAL,
         True
     )
     agregar_texto(
         slide,
-        Inches(0.9), Inches(2.4),
-        Inches(10.8), Inches(0.8),
-        "Scouting, perfiles de jugador, valor competitivo y apoyo a decisiones tacticas",
-        15,
+        Inches(0.9), Inches(2.0),
+        Inches(10.5), Inches(1.0),
+        "Scouting, perfiles de jugador, valor competitivo y apoyo a decisiones tácticas",
+        18,
         COLOR_NEUTRO
     )
     agregar_texto(
         slide,
         Inches(0.9), Inches(4.3),
-        Inches(10.5), Inches(1.2),
-        "Presentacion con graficas e interpretaciones del analisis.",
-        18,
+        Inches(10.5), Inches(1.0),
+        "Presentación con gráficas e interpretaciones del análisis.",
+        22,
         COLOR_TEXTO
     )
 
+    # Explicando la base de datos
+    slide = nueva_slide()
+    agregar_texto(slide,
+        Inches(0.9), Inches(0.5),
+        Inches(10.5), Inches(1.0),
+        "Entendiendo la base de datos.",
+        26,
+        COLOR_PRINCIPAL,
+        True
+    )
+    agregar_texto(
+        slide,
+        Inches(0.9), Inches(1.1),
+        Inches(10.5), Inches(1.0),
+        "¿De dónde se obtuvo?, ¿Qué contiene?, ¿Cuáles son sus limitaciones?",
+        18,
+        COLOR_NEUTRO
+    )
+    agregar_parrafos(
+        slide,
+        Inches(0.9), Inches(1.7),
+        Inches(10.5), Inches(4),
+        """La base de datos que utilizamos fue obtenida de Kaggle; su nombre, 'European Soccer Database'; el link del dataset es https://www.kaggle.com/datasets/hugomathien/soccer.
+        
+La base esta almacenada en un archivo .sqlite. Esta contiene información de partidos, jugadores, equipos y momios de partidos de equipos de primera división de ligas europeas. La información no es actual, esta data de registros del 2007 hasta registros del 2016.
+
+La base de datos tiene en total las siguiente siete tablas:
+
+- Player: Información básica de jugadores: nombre, fecha de nacimiento, altura, peso.
+- Player_Attributes: Estadísticos de jugadores. Valores extraídos de los videojuegos de FIFA.
+- Match: Registro de partidos. Informacion completa: fecha, equipos, visitante o casa, lineamiento, formacion, goles, eventos relevantes, momios, etc.
+- League: Ids y nombres de ligas.
+- Country: Ids y nombres de paises.
+- Team: Ids y nombres de equipos.
+- Team_Attributes: Estadísticos de equipos. Valores extraídos de los videojuegos de FIFA.
+        """,
+        18
+    )
+
+    # Explicando la direccion del analisis
+    slide = nueva_slide()
+    agregar_texto(slide,
+        Inches(0.9), Inches(0.5),
+        Inches(10.5), Inches(1.0),
+        "Dirección del análisis.",
+        26,
+        COLOR_PRINCIPAL,
+        True
+    )
+    agregar_texto(
+        slide,
+        Inches(0.9), Inches(1.1),
+        Inches(10.5), Inches(1.0),
+        "¿Para quién esta dirigido este análisis?, ¿Qué tipo de insights planteamos obtener?",
+        18,
+        COLOR_NEUTRO
+    )
+    agregar_parrafos(
+        slide,
+        Inches(0.9), Inches(1.7),
+        Inches(10.5), Inches(4),
+        """Como dirección del análisis escogimos el ayudar a directores técnicos y personal encargado de scouter jugadores de equipos de ligas europeas de primera división. El objetivo es obtener insights relevantes que puedan ayudar a una de tres cosas:
+
+- Mejorar toma de decisiones tácticas.
+- Ayudar a facilitar el proceso de scouting de nuevos jugadores.
+- Ayudar a mejorar el proceso de valuación de jugadores.
+
+Para esto, asumimos que la información de los atributos de jugadores es real y precisa. En realidad esto no es así, pues estos datos se obtienen de los videojuegos de FIFA, los cuales si bien sí se basan en análisis reales, terminan siendo modificados para balancer el videojuego.
+
+Dado el enfoque del análisis, no hicimos uso de la informacion de estadísticos por equipo ni de las estadisticas de los momios de los partidos. Esta información puede ser útil, pero no para ninguno de los tres objetivos principales planteados para este análisis.
+        """,
+        18
+    )
+    
     # Analisis
     for i, analysis in enumerate(analyses, start=1):
         # Slide de grafica
@@ -219,11 +293,11 @@ La evaluación de porteros suele basarse en una sobrecarga de métricas redundan
 
 ¿Qué solución se propone?
 
-Habilidades como Estirada (Diving) y Reflejos (0.89), o Colocación (Positioning) y Manejo (Handling) (0.83), son indivisibles. En la práctica, un portero que sabe ubicarse raramente da rebotes peligrosos. El entrenamiento y el scouting deben evaluar estos pares de forma conjunta, no aislada. Se detecta una variable aislada, el salto (Jumping) nos indica que la calidad de un portero se centra más en técnica y ubicación, no en atletismo puro.
+Habilidades como Estirada (Diving) y Reflejos (0.89), o Colocación (Positioning) y Manejo (Handling) (0.83), son indivisibles. En la práctica, un portero que sabe ubicarse raramente da rebotes peligrosos. El entrenamiento y el scouting deben evaluar estos pares de forma conjunta, no aislada. Se detecta una variable aislada, el salto (Jumping) no parece impactar mucho el overall rating de un portero, por lo cual la identificamos como un atriibuto secundario.
 
 ¿Qué utilidad trae al negocio el análisis?
 
-Hacer que auditar 15 atributos distintos por portero no sea necesario da un incremento significativo en el ahorro de tiempo y dinero. El sistema de scouting se puede automatizar con solo 2 o 3 métricas clave, ahorrando cientos de horas de análisis de video y datos, asimismo ayuda a identificar “gangas” en el mercado. Al saber que el rendimiento general el predecible se pueden filtrar bases de datos en segundos para encontrar porteros de ligas menores con el mismo perfil estadístico que opciones mucho más caras.
+Hacer que auditar 7 atributos distintos por portero no sea necesario da un incremento significativo en el ahorro de tiempo y dinero. El sistema de scouting se puede automatizar con solo 2 o 3 métricas clave, ahorrando cientos de horas de análisis de video y datos, asimismo ayuda a identificar “gangas” en el mercado. Al saber que el rendimiento general el predecible se pueden filtrar bases de datos en segundos para encontrar porteros de ligas menores con el mismo perfil estadístico que opciones mucho más caras.
 """
         },
         {
@@ -298,11 +372,18 @@ Si el equipo busca éxito inmediato para competir por un campeonato, debe aposta
         {
             "title": "¿Qué formaciones equilibran uso y rendimiento?",
             "figure": grafico_09,
-            "analysis_text": """El bubble plot sugiere que no todas las formaciones combinan del mismo modo frecuencia de uso y rendimiento. En la zona superior derecha, donde coinciden más puntos por partido y una diferencia de gol promedio menos negativa o incluso positiva, aparecen esquemas como 4-3-3, 4-4-2 y 4-2-3-1. Entre ellas, 4-2-3-1 destaca especialmente porque combina un rendimiento competitivo con una burbuja grande, es decir, con una muestra amplia de partidos, lo que hace más confiable la señal.
+            "analysis_text": """¿Qué problema se aborda en este análisis?
 
-También aparecen algunas formaciones con buen desempeño, pero con menor respaldo de muestra, como 3-5-2 y otras variantes cercanas al bloque superior. Esto sugiere que pueden ser opciones interesantes, pero conviene ser más prudente al interpretarlas, ya que una menor frecuencia de uso hace más difícil separar un patrón estable de un resultado puntual.
+Evaluar la relación entre el rendimiento, la frecuencia de uso y la proporción/tasa de partidos en casa de las 10 formaciones más utilizadas. 
 
-En el extremo opuesto, 5-3-2, 4-5-1 y 4-1-4-1 se ubican en la zona de peor balance, con menos puntos por partido y una diferencia de gol promedio más negativa. En conjunto, la gráfica sugiere que no basta con mirar qué formación se usa más: conviene priorizar esquemas que mantengan un equilibrio entre frecuencia y resultados, y en ese sentido 4-2-3-1 y 4-4-2 parecen alternativas más sólidas que otras formaciones menos consistentes."""
+Los insights:
+
+Las formaciones más usadas en general tienden a, en general, traer mejores resultados para el equipo que las utilice, y no parece haber un impacto relevante en si la formación fue utilizada por un equipo local o visitante. De la gráfica obtenemos que las formaciones 4-3-3, 4-3-1-2, 4-4-2 y 4-1-2-1-2 son las más sólidas, pues son las únicas con una diferencia de gol promedio positiva. De estas la formación 4-4-2 y la formación 4-3-3 son las que tienen una señal mas significativa, pues de su tamaño de burbuja inferimos que la muestra es más grande, y por tanto, describe mejor el promedio real de la población.
+
+Insights ejecutables:
+
+En base a los resultados observados, podemos recomendar al equipo técnico que considere optar por las formaciones antes mencionadas; y podríamos recomendar precaución con aquellas con una muestra de menor tamaño (4-1-2-1-2 y 4-3-1-2). Además, este análisis nos ayudara a comprender el siguiente análisis y plantear insights más robustos.
+"""
         },
         {
             "title": "¿Qué formaciones son más seguras o más riesgosas?",
