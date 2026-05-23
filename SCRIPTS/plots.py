@@ -178,7 +178,7 @@ def plot_analisis_03(df_player_latest_imputed: pd.DataFrame):
     df_gap = df_player_latest_imputed.copy()
 
     # Filtramos solo jugadores jovenes
-    df_gap = df_gap[df_gap["AGE"] < 23].copy()
+    df_gap = df_gap[df_gap["AGE"].between(18, 23)].copy()
 
     # Calculamos el gap entre potential y overall rating
     df_gap["GAP"] = df_gap["POTENTIAL"] - df_gap["OVERALL_RATING"]
@@ -201,7 +201,7 @@ def plot_analisis_03(df_player_latest_imputed: pd.DataFrame):
 
     ax.hist(df_gap_outfield["GAP"].dropna(), bins = bins_outfield, color = COLOR_PRINCIPAL, **hist_style)
 
-    ax.set_title("Distribución del gap de desarrollo en jugadores de campo jóvenes (<=23)", fontsize = 16, fontweight = "bold", pad = 18)
+    ax.set_title("Distribución del gap de desarrollo en jugadores de campo jóvenes (18-23)", fontsize = 16, fontweight = "bold", pad = 18)
     ax.set_xlabel("Gap de desarrollo (Potential - Overall Rating)", fontsize = 12)
     ax.set_ylabel("Numero de jugadores", fontsize = 12)
     ax.grid(axis = "y", alpha = 0.2, linestyle = "--", linewidth = 0.8)
@@ -223,7 +223,7 @@ def plot_analisis_04(df_player_latest_imputed: pd.DataFrame):
     df_gap = df_player_latest_imputed.copy()
 
     # Filtramos solo jugadores jovenes
-    df_gap = df_gap[df_gap["AGE"] < 23].copy()
+    df_gap = df_gap[df_gap["AGE"].between(18, 23)].copy()
 
     # Calculamos el gap entre potential y overall rating
     df_gap["GAP"] = df_gap["POTENTIAL"] - df_gap["OVERALL_RATING"]
@@ -246,7 +246,7 @@ def plot_analisis_04(df_player_latest_imputed: pd.DataFrame):
 
     ax.hist(df_gap_gk["GAP"].dropna(), bins = bins_gk, color = COLOR_SECUNDARIO, **hist_style)
 
-    ax.set_title("Distribución del gap de desarrollo en porteros jóvenes (<=23)", fontsize = 16, fontweight = "bold", pad = 18)
+    ax.set_title("Distribución del gap de desarrollo en porteros jóvenes (18-23)", fontsize = 16, fontweight = "bold", pad = 18)
     ax.set_xlabel("Gap de desarrollo (Potential - Overall Rating)", fontsize = 12)
     ax.set_ylabel("Número de porteros", fontsize = 12)
     ax.grid(axis = "y", alpha = 0.2, linestyle = "--", linewidth = 0.8)
@@ -424,8 +424,8 @@ def plot_analisis_07(df_player_latest_imputed: pd.DataFrame):
     df_young = df_player_latest_imputed.copy()
     df_young = df_young[df_young["PLAYER_TYPE"] == "OUTFIELD"]
 
-    # Filtramos para comparar solo jugadores jovenes (<= 23 años)
-    df_young = df_young[df_young["AGE"] <= 23]
+    # Filtramos para comparar solo jugadores jovenes (18-23 años)
+    df_young = df_young[df_young["AGE"].between(18, 23)]
 
     # Definimos el umbral del Top 10% de potencial
     umbral_top = df_young["POTENTIAL"].quantile(0.90)

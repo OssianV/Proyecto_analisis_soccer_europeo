@@ -17,7 +17,7 @@ COLOR_ALERTA = "D95D39"
 COLOR_NEUTRO = "8D99AE"
 
 # Mejor forma de manejar direcciones de archivos
-
+# Al hacer esto, no importa desde que directorio se ejecute el script, siempre encontrara las rutas correctas relativas al proyecto
 script_dir = Path(__file__).resolve().parent
 project_root = script_dir.parent
 
@@ -31,7 +31,6 @@ def rgb(hex_color):
         int(hex_color[2:4], 16),
         int(hex_color[4:6], 16)
     )
-
 
 def crear_presentacion(output_path, analyses, integrantes):
     prs = Presentation()

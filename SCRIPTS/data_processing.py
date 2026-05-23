@@ -245,7 +245,7 @@ def build_processed_dataframes(database_path: str):
         }
 
         # Definimos las columnas numericas donde si debemos imputar nan
-        numerical_columns_with_na = [col for col in df_player_latest_imputed.columns if df_player_latest_imputed[col].isna().any() and np.issubdtype(df_player_latest_imputed[col].dtype, np.number) and col not in numerical_columns_to_exclude]
+        numerical_columns_with_na = [col for col in df_player_latest_imputed.columns if df_player_latest_imputed[col].isna().any() and df_player_latest_imputed[col].dtype in [np.float64, np.int64] and col not in numerical_columns_to_exclude]
 
         # Imputamos columnas numericas con la mediana por tipo de jugador
         df_player_latest_imputed = _impute_numeric_nan_with_median(df_player_latest_imputed, numerical_columns_with_na, "PLAYER_TYPE")
