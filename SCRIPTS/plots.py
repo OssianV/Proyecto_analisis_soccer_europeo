@@ -516,7 +516,7 @@ def plot_analisis_09(df_team_match: pd.DataFrame):
     )
 
     # Nos quedamos con las formaciones mas usadas
-    df_form = (df_form[df_form["count"] >= 50].sort_values("count", ascending = False).head(10))
+    df_form = (df_form[df_form["count"] >= 20].sort_values("count", ascending = False).head(10))
 
     # Graficamos
     fig, ax = plt.subplots(figsize = (11, 7))
@@ -571,7 +571,7 @@ def plot_analisis_09(df_team_match: pd.DataFrame):
     fig.text(
         0.31,
         0.02,
-        "Tamano de burbuja = cantidad de partidos",
+        "Tamano de burbuja = cantidad de partidos\nLas 10 formaciones mas usadas",
         ha = "center",
         fontsize = 10,
         color = COLOR_NEUTRO

@@ -154,7 +154,7 @@ def crear_presentacion(output_path, analyses, integrantes):
             slide,
             Inches(0.7), Inches(0.5),
             Inches(11.0), Inches(0.5),
-            f"Lectura del analisis {i:02d}: {analysis['title']}",
+            f"Lectura del análisis {i:02d}: {analysis['title']}",
             20,
             COLOR_SECUNDARIO,
             True
@@ -195,63 +195,87 @@ if __name__ == "__main__":
 
     analyses = [
         {
-            "title": "Que atributos mirar en jugadores de campo?",
+            "title": "¿Qué atributos mirar en jugadores de campo?",
             "figure": grafico_01,
-            "analysis_text": """En el heatmap de jugadores de campo se observan bloques claros de atributos que se mueven casi juntos. Por ejemplo, ACCELERATION y SPRINT_SPEED tienen una correlación muy alta (0.89), lo que sugiere que ambas variables describen casi la misma dimensión de rapidez. Algo parecido ocurre con INTERCEPTIONS y STANDING_TACKLE (0.89), que representan un perfil defensivo muy similar.
+            "analysis_text": """¿Qué problema intentamos resolver con nuestro análisis?
 
-También aparece un bloque técnico-ofensivo bastante marcado. DRIBBLING y BALL_CONTROL tienen una correlación alta (0.85), mientras que SHORT_PASSING y LONG_PASSING también se relacionan fuertemente (0.80). Además, FINISHING y POSITIONING muestran una correlación importante (0.80), lo que indica que los jugadores que suelen ubicarse mejor en zonas de ataque también tienden a definir mejor.
+El scouting tradicional pierde tiempo evaluando decenas de atributos por jugador. Esto genera exceso de información y retrasa la toma de decisiones durante las ventanas de fichajes.
 
-A nivel general, OVERALL_RATING se relaciona bastante con POTENTIAL (0.81) y con REACTIONS (0.78). Esto sugiere que la valoración global del jugador no depende de un solo atributo aislado, sino de combinaciones de técnica, lectura de juego y capacidad física. En otras palabras, para scouting de jugadores de campo no conviene tratar todas estas variables como independientes, porque varias son parcialmente redundantes y pueden resumirse por bloques."""
+Solución propuesta:
+
+La matriz de correlación demuestra matemáticamente que los atributos se agrupan en "bloques". Por ejemplo, Velocidad y Aceleración son prácticamente el mismo dato (0.89 de similitud), al igual que Regate y Control de Balón (0.85). No necesitamos analizar 20 variables independientes.
+
+Implicación del negocio: 
+
+Esto nos permite reducir a la mitad los indicadores clave de rendimiento (KPIs) Podemos crear un filtro automatizado mucho más ágil. En lugar de buscar "el jugador perfecto en 20 atributos", el equipo de scouting puede enfocarse en evaluar 4 o 5 "bloques o perfiles" fundamentales. Esto acelera el descarte de jugadores que no encajan en el club, optimiza las horas de trabajo de los visores y reduce el riesgo económico en los fichajes.
+"""
         },
         {
-            "title": "Que atributos mirar en porteros?",
+            "title": "¿Qué atributos mirar en porteros?",
             "figure": grafico_02,
-            "analysis_text": """En el heatmap de porteros se observa una estructura mucho más concentrada que en jugadores de campo. La variable OVERALL_RATING está fuertemente relacionada con casi todos los atributos específicos de arquero, en especial con GK_MEAN (0.98), GK_DIVING (0.91), GK_REFLEXES (0.90), GK_POSITIONING (0.89) y GK_HANDLING (0.88). Esto indica que el rendimiento general del portero está muy dominado por sus habilidades técnicas propias del puesto.
+            "analysis_text": """¿Qué problema intentamos solucionar con nuestro análisis? 
 
-También se ven relaciones altas entre atributos internos del arco. Por ejemplo, GK_DIVING y GK_REFLEXES tienen una correlación de 0.89, mientras que GK_POSITIONING y GK_HANDLING alcanzan 0.83. Esto sugiere que varios indicadores del portero miden casi la misma calidad subyacente, por lo que existe bastante redundancia entre ellos.
+La evaluación de porteros suele basarse en una sobrecarga de métricas redundantes, lo que ralentiza la identificación de talento y encarece la adquisición de datos y herramientas de scouting.
 
-En cambio, JUMPING muestra una relación bastante menor con el bloque principal de variables de arquero. Por ejemplo, su correlación con GK_MEAN es solo de 0.40. Esto sugiere que el salto aporta información complementaria, pero no explica tanto el nivel global del portero como las habilidades técnicas de atajada, colocación y reflejos.
+¿Qué solución se propone?
 
-En conjunto, este gráfico sugiere que para evaluar porteros se puede resumir gran parte del perfil usando pocas variables clave, porque muchas de las métricas del puesto se mueven casi juntas. A diferencia de los jugadores de campo, aquí la redundancia es más fuerte y el perfil parece estar más concentrado en un solo bloque de rendimiento especializado."""
+Habilidades como Estirada (Diving) y Reflejos (0.89), o Colocación (Positioning) y Manejo (Handling) (0.83), son indivisibles. En la práctica, un portero que sabe ubicarse raramente da rebotes peligrosos. El entrenamiento y el scouting deben evaluar estos pares de forma conjunta, no aislada. Se detecta una variable aislada, el salto (Jumping) nos indica que la calidad de un portero se centra más en técnica y ubicación, no en atletismo puro.
+
+¿Qué utilidad trae al negocio el análisis?
+
+Hacer que auditar 15 atributos distintos por portero no sea necesario da un incremento significativo en el ahorro de tiempo y dinero. El sistema de scouting se puede automatizar con solo 2 o 3 métricas clave, ahorrando cientos de horas de análisis de video y datos, asimismo ayuda a identificar “gangas” en el mercado. Al saber que el rendimiento general el predecible se pueden filtrar bases de datos en segundos para encontrar porteros de ligas menores con el mismo perfil estadístico que opciones mucho más caras.
+"""
         },
         {
-            "title": "Cuanto margen tienen los campistas jovenes?",
+            "title": "¿Cuánto margen tienen los campistas jovenes?",
             "figure": grafico_03,
-            "analysis_text": """En el histograma de jugadores de campo se observa que la gran mayoría de los casos tiene un gap positivo entre POTENTIAL y OVERALL_RATING. Esto sugiere que, dentro de este grupo de jugadores jóvenes, lo normal es que todavía exista margen de desarrollo y que su nivel actual aún esté por debajo de su techo estimado.
+            "analysis_text": """¿Qué problema se trata en este análisis?
 
-La distribución se concentra sobre todo entre valores de gap de 7 a 11, con una mediana cercana a 8. Esto indica que, para muchos jugadores de campo jóvenes, el margen de crecimiento existe, pero no suele ser extremo. Los casos con gaps muy altos también aparecen, incluso llegando a valores cercanos a 22, pero claramente son menos frecuentes y pueden interpretarse como perfiles especialmente interesantes para scouting.
+Al fichar talento joven (18 – 23 años), los clubes suelen guiarse por la intuición sobre "cuánto puede mejorar" un jugador, asumiendo riesgos financieros altos sin un parámetro de lo que es un crecimiento normal frente a uno excepcional.
 
-En conjunto, el gráfico sugiere que los jugadores de campo jóvenes suelen tener un margen de desarrollo moderado y relativamente estable. Por eso, al buscar prospectos, conviene prestar más atención a los casos que se alejan hacia la derecha de la distribución, ya que ahí es donde aparecen jugadores con un potencial mucho más alto que su rendimiento actual."""
+¿Qué solución se propone?
+
+Este análisis se basa exclusivamente en un conjunto de datos de ligas de primera división europea. En base al histograma, podemos observar que el margen de crecimiento (gap) de un prospecto joven incluido en este dataset tiende a concentrarse entre los 7 y 10 puntos. Este comportamiento de la muestra define nuestro estándar de mercado.
+
+¿Qué implicaciones hay para el negocio?
+
+El departamento de scouting debe prestar menos atención al centro de la gráfica y enfocarse exclusivamente en la "cola derecha" (prospectos con un gap mayor a 12-14 puntos). Estos son los "activos infravalorados": jugadores cuyo costo de transferencia actual es bajo porque su rendimiento inmediato no refleja su techo real. Aquí es donde el club puede comprar barato y vender caro.
+"""
         },
         {
-            "title": "Cuanto margen tienen los porteros jovenes?",
+            "title": "¿Cuánto margen tienen los porteros jovenes?",
             "figure": grafico_04,
-            "analysis_text": """En el histograma de porteros también se observa una distribución claramente desplazada hacia valores positivos de gap. Esto sugiere que los arqueros jóvenes del dataset, al igual que los jugadores de campo, suelen conservar margen de desarrollo entre su POTENTIAL y su OVERALL_RATING.
+            "analysis_text": """¿Qué problema se aborda en este análisis?
 
-En este caso, la distribución se concentra principalmente entre 7 y 12, con una mediana cercana a 9. Esto sugiere un margen de crecimiento ligeramente mayor que el observado en jugadores de campo. Sin embargo, aquí el número de observaciones es bastante menor, por lo que conviene interpretar el patrón con más cuidado y no sacar conclusiones demasiado fuertes a partir de pequeñas diferencias.
+Evaluar el talento y el techo de los porteros jóvenes (18-23 años) es uno de los mayores retos en el mercado, ya que su curva de maduración suele diferir de la del resto del equipo. Asumir riesgos financieros basándose solo en la intuición puede resultar en inversiones estancadas.
 
-En conjunto, el gráfico indica que los porteros jóvenes también presentan espacio para mejorar, pero el análisis debe leerse con más prudencia por el tamaño de muestra. Aun así, los casos ubicados hacia la derecha de la distribución pueden verse como porteros especialmente prometedores, ya que combinan un nivel actual todavía contenido con un techo estimado más alto."""
+¿Qué solución se presenta? 
+
+Este análisis se basa exclusivamente en un conjunto de datos de ligas de primera división europea. En base al histograma, podemos observar que el margen de crecimiento (gap) de los arqueros jóvenes incluidos en este dataset tiende a concentrarse principalmente entre los 7 y 12 puntos, con una mediana cercana a 9. Este comportamiento observado en la muestra define nuestro estándar de mercado para la posición.
+
+¿Qué implicaciones tiene para el negocio?
+
+El departamento de scouting debe enfocar sus recursos en la "cola derecha" de la distribución. Estos casos atípicos representan arqueros que combinan un nivel actual todavía contenido con un techo estimado mucho más alto. Identificarlos permite adquirir prospectos prometedores a un costo de transferencia inicial bajo, maximizando la plusvalía a largo plazo.
+"""
         },
         {
-            "title": "Que distingue a los jovenes con alto potencial?",
+            "title": "¿Qué distingue a los jovenes con alto potencial?",
             "figure": grafico_05,
-            "analysis_text": """En este gráfico se observa que los jugadores jóvenes de alto potencial no se diferencian tanto por atributos defensivos o físicos puros, sino sobre todo por rasgos técnicos y ofensivos. Los atributos que más sobresalen son DRIBBLING, CURVE, BALL_CONTROL, LONG_SHOTS, POSITIONING y VISION, lo que sugiere que el techo de desarrollo suele estar más asociado con calidad técnica y capacidad ofensiva que con fuerza o juego defensivo.
+            "analysis_text": """Los jugadores jóvenes con mayor potencial destacan principalmente por atributos técnicos y ofensivos, más que por capacidades físicas o defensivas. DRIBBLING, CURVE, BALL_CONTROL y LONG_SHOTS son las variables con mayor diferencia respecto al grupo de referencia, lo que sugiere que el principal desarrollo está más asociado con calidad técnica, creatividad y capacidad para generar jugadas ofensivas que con atributos defensivos tradicionales. También sobresalen POSITIONING y VISION, indicando que la lectura de juego y la toma de decisiones son factores importantes en perfiles con alto potencial.
 
-También destaca que SHORT_PASSING, CROSSING, SHOT_POWER y REACTIONS aparecen entre las diferencias más altas. Esto sugiere que los jugadores más prometedores no solo tienen habilidad individual, sino también mejores recursos para participar en la circulación del balón y resolver jugadas con más calidad.
-
-En conjunto, el gráfico sugiere que, al buscar talento joven con margen de crecimiento, conviene priorizar perfiles con buena técnica ofensiva, control de balón y lectura de juego. De todos modos, este resultado debe interpretarse como una asociación y no como causalidad, ya que tener estos atributos no garantiza por sí solo que un jugador alcance su potencial."""
+Desde la perspectiva de scouting, el gráfico sugiere que varios atributos pueden agruparse en bloques similares para simplificar la evaluación de talento joven. Por ejemplo, DRIBBLING, BALL_CONTROL y CURVE reflejan capacidades técnicas relacionadas, mientras que VISION, POSITIONING y SHORT_PASSING representan comprensión táctica y participación ofensiva. Esto permitiría reducir la cantidad de métricas que un scout necesita revisar individualmente y enfocarse en atributos clave representativos de cada bloque, haciendo más eficiente la identificación de jugadores con mayor margen de desarrollo.
+"""
         },
         {
-            "title": "Que tan cerrados son los partidos?",
+            "title": "¿Qué tan cerrados son los partidos?",
             "figure": grafico_06,
-            "analysis_text": """En el gráfico de anillo se observa que la categoría más frecuente es la de partidos Cerrados, es decir, aquellos definidos por 1 gol de diferencia, con 9,598 partidos, equivalentes a aproximadamente 37.0% del total. Además, si se suman los Empates y los partidos Cerrados, se obtiene alrededor de 62.3% de todos los encuentros. Esto indica que la mayor parte de los partidos del dataset se mueve en márgenes pequeños y competitivos.
+            "analysis_text": """La mayor parte de los partidos del dataset se define por márgenes pequeños. Los encuentros cerrados, decididos por un solo gol, representan la categoría más frecuente con cerca del 37% del total, y al sumarlos con los empates, más del 60% de los partidos terminan con diferencias mínimas. Esto confirma que los resultados suelen ser altamente competitivos y que los partidos dominados ampliamente son mucho menos comunes. En contraste, los encuentros con diferencias de 3 o más goles representan la proporción más baja del análisis.
 
-Por otro lado, los partidos Moderados, definidos por 2 goles de diferencia, representan cerca de 22.1%, mientras que los partidos Amplios, con 3 o más goles de diferencia, son los menos frecuentes con aproximadamente 15.6%. Esto sugiere que los resultados abultados existen, pero son claramente menos comunes que los partidos ajustados.
-
-En conjunto, el gráfico respalda la idea de que la mayoría de los partidos suelen ser cerrados. Desde una perspectiva de análisis deportivo, esto sugiere que pequeñas diferencias de rendimiento, decisiones tácticas o momentos puntuales del juego pueden tener un impacto grande en el resultado final, porque los márgenes amplios no son la norma sino la excepción."""
+Desde una perspectiva táctica y de scouting, este resultado sugiere que pequeñas ventajas competitivas pueden tener un impacto decisivo en el resultado final. Factores como la toma de decisiones, la concentración, la efectividad en jugadas puntuales o la capacidad para sostener ventajas mínimas adquieren más valor que simplemente generar grandes diferencias estadísticas. Para equipos y analistas, esto implica que conviene priorizar jugadores y esquemas tácticos capaces de influir en momentos clave del partido, ya que en contextos tan cerrados los detalles terminan definiendo gran parte de los resultados.
+"""
         },
         {
-            "title": "En que destacan las altas promesas?",
+            "title": "¿En qué destacan las altas promesas?",
             "figure": grafico_07,
             "analysis_text": """El boxplot muestra que el grupo de Alta Promesa (Top 10%) presenta distribuciones más altas que el grupo de Resto de Jóvenes en los seis atributos evaluados. Esto se nota porque, en todos los casos, la mediana de las altas promesas queda por encima de la mediana del resto, lo que indica una ventaja consistente y no aislada en un solo atributo.
 
@@ -260,18 +284,19 @@ Las diferencias más marcadas aparecen en atributos como Visión, Control de Bal
 En conjunto, la gráfica sugiere que el potencial alto en jugadores jóvenes está asociado a un perfil más completo y balanceado. Es decir, las altas promesas no sobresalen solo en un atributo puntual, sino que tienden a mantener niveles superiores en varias dimensiones importantes del rendimiento."""
         },
         {
-            "title": "A que edad rinden mejor los jugadores?",
+            "title": "¿A qué edad rinden mejor los jugadores?",
             "figure": grafico_08,
-            "analysis_text": """Al observar la curva de tendencia en este gráfico de líneas, podemos identificar con claridad las tres etapas biológicas y deportivas que definen la carrera de un futbolista profesional:
+            "analysis_text": """De este gráfico de líneas, podemos identificar cuatro etapas que definen la carrera de un futbolista profesional:
 
 - Fase de crecimiento: desde las edades más tempranas (16-18 años), la línea muestra una pendiente ascendente constante y pronunciada. Es en esta etapa donde los jugadores adquieren madurez táctica, experiencia y desarrollo físico.
-- El "prime" o pico de rendimiento: la curva alcanza su punto más alto y forma una "meseta" típica entre los 27 y los 31 años. Es en esta franja donde el jugador encuentra el balance perfecto: combina su máxima experiencia futbolística con un físico aún en óptimas condiciones.
+- El "prime" o pico de rendimiento: la curva alcanza uno de sus puntos más altos y forma una "meseta" típica entre los 27 y los 31 años. Es en esta franja donde el jugador encuentra el balance perfecto: combina su máxima experiencia futbolística con un físico aún en óptimas condiciones.
 - Fase de declive: a partir de los 32 años, la línea comienza un descenso evidente, reflejando la pérdida natural de capacidades físicas, como velocidad, explosividad o resistencia, que termina por afectar la valoración general.
+- Outliers: El ascenso abrupto en jugadores de 35+ puede deberse a outliers. En este ambito hay que investigar más a fondo, pues puede ser que el promedio suba debido a que los jugadores más talentosos posponen su retiro, sesgando el resultado.
 
-Este gráfico dicta la lógica financiera y deportiva para armar una plantilla equilibrada. Si el equipo busca éxito inmediato para competir por un campeonato, debe apostar por jugadores en su "prime" (27-30 años), sabiendo que su costo será el más elevado. En cambio, si la directiva busca construir un proyecto a mediano plazo y generar plusvalía, la inversión debe ir hacia la fase de crecimiento (20-23 años), adquiriendo talento cuyo rendimiento y valor de mercado estadísticamente irán al alza."""
+Si el equipo busca éxito inmediato para competir por un campeonato, debe apostar por jugadores en su "prime" (27-30 años), sabiendo que su costo será el más elevado. En cambio, si la directiva busca construir un proyecto a mediano plazo y generar plusvalía, la inversión debe ir hacia la fase de crecimiento (20-23 años), adquiriendo talento cuyo rendimiento y valor de mercado estadísticamente irán al alza."""
         },
         {
-            "title": "Que formaciones equilibran uso y rendimiento?",
+            "title": "¿Qué formaciones equilibran uso y rendimiento?",
             "figure": grafico_09,
             "analysis_text": """El bubble plot sugiere que no todas las formaciones combinan del mismo modo frecuencia de uso y rendimiento. En la zona superior derecha, donde coinciden más puntos por partido y una diferencia de gol promedio menos negativa o incluso positiva, aparecen esquemas como 4-3-3, 4-4-2 y 4-2-3-1. Entre ellas, 4-2-3-1 destaca especialmente porque combina un rendimiento competitivo con una burbuja grande, es decir, con una muestra amplia de partidos, lo que hace más confiable la señal.
 
@@ -280,11 +305,12 @@ También aparecen algunas formaciones con buen desempeño, pero con menor respal
 En el extremo opuesto, 5-3-2, 4-5-1 y 4-1-4-1 se ubican en la zona de peor balance, con menos puntos por partido y una diferencia de gol promedio más negativa. En conjunto, la gráfica sugiere que no basta con mirar qué formación se usa más: conviene priorizar esquemas que mantengan un equilibrio entre frecuencia y resultados, y en ese sentido 4-2-3-1 y 4-4-2 parecen alternativas más sólidas que otras formaciones menos consistentes."""
         },
         {
-            "title": "Que formaciones son mas seguras o mas riesgosas?",
+            "title": "¿Qué formaciones son más seguras o más riesgosas?",
             "figure": grafico_10,
-            "analysis_text": """Al ver los resultados, se nota que no todas las formaciones se comportan igual en la cancha. Hay algunas que son más confiables: no siempre ganan, pero pierden poco y te mantienen compitiendo partido a partido, lo cual es clave en torneos largos. Otras son más arriesgadas: te pueden dar muchas victorias, pero también más derrotas, como si el equipo jugara al límite; estas pueden ser útiles cuando necesitas ir por todo, por ejemplo en partidos decisivos.
+            "analysis_text": """Desde una perspectiva táctica, el gráfico sugiere que las formaciones pueden clasificarse según su perfil de riesgo: esquemas agresivos para contextos donde ganar es prioritario, y esquemas más sólidos para torneos largos o partidos donde minimizar derrotas es más importante. Tanto para entrenadores como analistas, esto permite evaluar formaciones no solo por porcentaje de victorias, sino por la distribución completa de resultados. Así, una formación con menos derrotas y más empates puede ser más valiosa en ciertos contextos competitivos que otra con más victorias, pero también con mayor inestabilidad en sus resultados.
 
-También están las formaciones más conservadoras, que tienden a empatar mucho: no arriesgan demasiado, pero tampoco marcan tanta diferencia. Para un entrenador, esto se traduce en elegir la formación no solo por estilo, sino por el momento: usar esquemas más sólidos cuando buscas regularidad y control, y formaciones más agresivas cuando necesitas ganar sí o sí, aunque implique asumir más riesgo."""
+Este análisis es una interpretación más “superficial” ya que la cantidad de formaciones analizadas no se toma en cuenta. Esto sesga los resultados y hace que algunas formaciones (como la 3-2-3-2) parezcan aparentemente más efectivas, pero esto se debe a que su muestra es más reducida. A diferencia de la diapositiva anterior donde se consideran muestras más amplias y con mejor representación, por lo que sus conclusiones pueden ser más definitivas y tener un mejor enfoque de comparación.
+"""
         }
     ]
 
