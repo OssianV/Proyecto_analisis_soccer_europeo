@@ -24,6 +24,9 @@ project_root = script_dir.parent
 database_path = project_root / "INPUTS" / "database.sqlite"
 output_path = project_root / "OUTPUTS" / "presentacion_final.pptx"
 
+if output_path.exists():
+    output_path.unlink(missing_ok=True)
+
 def rgb(hex_color):
     hex_color = hex_color.replace("#", "")
     return RGBColor(
@@ -33,17 +36,20 @@ def rgb(hex_color):
     )
 
 def crear_presentacion(output_path, analyses, integrantes):
+    """Crea la presentacion tomando como input el path donde se va a crear la presentacion, los analisis y los integrantes"""
     prs = Presentation()
     prs.slide_width = Inches(13.33)
     prs.slide_height = Inches(7.5)
 
     def nueva_slide():
+        """Agrega una nueva slide vacia con fondo de color de nuestra paleta de colores"""
         slide = prs.slides.add_slide(prs.slide_layouts[6])
         slide.background.fill.solid()
         slide.background.fill.fore_color.rgb = rgb(COLOR_FONDO)
         return slide
 
     def agregar_texto(slide, left, top, width, height, texto, tamano, color, negrita=False):
+        """"""
         box = slide.shapes.add_textbox(left, top, width, height)
         tf = box.text_frame
         tf.word_wrap = True
@@ -62,7 +68,6 @@ def crear_presentacion(output_path, analyses, integrantes):
         box = slide.shapes.add_textbox(left, top, width, height)
         tf = box.text_frame
         tf.word_wrap = True
-        tf.clear()
 
         parrafos = [p.strip() for p in texto.split("\n\n") if p.strip()]
 

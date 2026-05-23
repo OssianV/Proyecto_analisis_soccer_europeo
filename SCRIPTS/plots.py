@@ -41,7 +41,7 @@ plt.rcParams.update({
     "grid.color": COLOR_GRID,
     "grid.alpha": 0.35,
     "font.family": "sans-serif",
-    "font.sans-serif": ["Aptos", "Segoe UI", "Calibri", "DejaVu Sans"],
+    "font.sans-serif": ["Aptos", "DejaVu Sans"],
     "axes.titlesize": 14,
     "axes.titleweight": "bold",
     "axes.labelsize": 11,
@@ -310,8 +310,8 @@ def plot_analisis_05(df_player_latest_imputed: pd.DataFrame):
         "SLIDING_TACKLE"
     ]
 
-    # Definimos el grupo de alto potencial como el top 20 por ciento
-    potential_cutoff = df_young["POTENTIAL"].quantile(0.80)
+    # Definimos el grupo de alto potencial como el top 10 por ciento
+    potential_cutoff = df_young["POTENTIAL"].quantile(0.90)
     df_high_potential = df_young[df_young["POTENTIAL"] >= potential_cutoff].copy()
 
     # Definimos el grupo de referencia como el resto de jugadores jovenes
@@ -340,15 +340,15 @@ def plot_analisis_05(df_player_latest_imputed: pd.DataFrame):
     for bar, value in zip(bars, mean_diff.values):
         ax.text(value + 0.25, bar.get_y() + bar.get_height() / 2, f"{value:.1f}", va = "center", fontsize = 9)    # .get_y obtiene el piso, .get_height()/2 lo centra verticalmente
 
-    ax.set_title("Atributos que mas distinguen a jugadores jóvenes (18-23) de alto potencial (mejor 20%)", loc = "left", pad = 15)
-    ax.set_xlabel("Diferencia de promedio frente al grupo de referencia (peor 80%)")
+    ax.set_title("Atributos que mas distinguen a jugadores jóvenes (18-23) de alto potencial (mejor 10%)", loc = "left", pad = 15)
+    ax.set_xlabel("Diferencia de promedio frente al grupo de referencia (peor 90%)")
     ax.set_ylabel("")
     ax.grid(axis = "x")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
-    ax.text(0.98, 0.03, f"Edad: 18 a 23 años\nTop 20% en potential\nCorte: {potential_cutoff:.0f}\n# alto potencial: {len(df_high_potential)}", transform = ax.transAxes, ha = "right", va = "bottom", fontsize = 9)
+    ax.text(0.98, 0.03, f"Corte valor potencial: {potential_cutoff:.0f}\n# alto potencial: {len(df_high_potential)}", transform = ax.transAxes, ha = "right", va = "bottom", fontsize = 9)
 
     fig.tight_layout()
     return fig
@@ -428,7 +428,7 @@ def plot_analisis_07(df_player_latest_imputed: pd.DataFrame):
     df_young = df_young[df_young["AGE"].between(18, 23)]
 
     # Definimos el umbral del Top 10% de potencial
-    umbral_top = df_young["POTENTIAL"].quantile(0.90)
+    umbral_top = df_young["POTENTIAL"].quantile(0.80)
 
     # Creamos una nueva columna para clasificar a los jugadores
     df_young["PROSPECT_LEVEL"] = np.where(df_young["POTENTIAL"] >= umbral_top, "Alta Promesa (Top 10%)", "Resto de Jovenes")
@@ -448,9 +448,9 @@ def plot_analisis_07(df_player_latest_imputed: pd.DataFrame):
     sns.boxplot(data=df_melted, x="ATRIBUTO", y="PUNTUACION", hue="PROSPECT_LEVEL", palette=paleta_boxplot, ax=ax)
 
     # Titulos y etiquetas
-    ax.set_title("Distribucion de atributos de jugadores de campo: Altas Promesas vs Resto de Jóvenes (<= 23 años)", loc="left", pad=15)
+    ax.set_title("Distribución de atributos de jugadores de campo jóvenes (18 - 23): Altas Promesas vs Resto de Jóvenes", loc="left", pad=15)
     ax.set_xlabel("Atributos Evaluados")
-    ax.set_ylabel("Puntuacion del Atributo")
+    ax.set_ylabel("Puntuación del Atributo")
 
     # Movemos la leyenda para que no tape los datos
     sns.move_legend(ax, "lower right", title="Nivel de Prospecto")
@@ -510,18 +510,13 @@ def plot_analisis_09(df_team_match: pd.DataFrame):
             count = ("MATCH_ID", "count"),
             avg_points = ("POINTS", "mean"),
             avg_goal_diff = ("GOAL_DIFF", "mean"),
-            win_rate = ("RESULT", lambda x: (x == "W").mean())
+            is_home_rate = ("IS_HOME", "mean")
         )
         .reset_index()
     )
 
     # Nos quedamos con las formaciones mas usadas
-    df_form = (
-        df_form[df_form["count"] >= 50]
-        .sort_values("count", ascending = False)
-        .head(10)
-        .copy()
-    )
+    df_form = (df_form[df_form["count"] >= 50].sort_values("count", ascending = False).head(10))
 
     # Graficamos
     fig, ax = plt.subplots(figsize = (11, 7))
@@ -530,8 +525,8 @@ def plot_analisis_09(df_team_match: pd.DataFrame):
         df_form["avg_goal_diff"],
         df_form["avg_points"],
         s = df_form["count"] * 1.5,
-        c = df_form["win_rate"],
-        cmap = "YlGnBu",
+        c = df_form["is_home_rate"],
+        cmap = "Blues",
         alpha = 0.8,
         edgecolors = "white",
         linewidth = 1.2
@@ -539,14 +534,14 @@ def plot_analisis_09(df_team_match: pd.DataFrame):
 
     # Barra de color
     cbar = plt.colorbar(scatter, ax = ax, shrink = 0.85)
-    cbar.set_label("Tasa de victoria", fontsize = 10, color = COLOR_TEXTO)
+    cbar.set_label("Tasa de partidos en casa", fontsize = 10, color = COLOR_TEXTO)
     cbar.outline.set_edgecolor(COLOR_GRID)
 
-    # Etiquetas simples
-    offsets = [0.012, -0.014, 0.018, -0.020]
+    # Se agregan etiquetas a cada burbuja y se ajustan sus posiciones para que sean legibles
+    offsets = [0.012, -0.012]
 
     for i, row in enumerate(df_form.itertuples()):
-        dy = offsets[i % len(offsets)]
+        dy = offsets[i % len(offsets)]    # Para alternar entre arriba y abajo del centro
 
         ax.text(
             row.avg_goal_diff,
@@ -571,10 +566,10 @@ def plot_analisis_09(df_team_match: pd.DataFrame):
     ax.grid(alpha = 0.25, linestyle = "--")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.margins(x = 0.08, y = 0.10)
+    ax.margins(x = 0.2, y = 0.2)
 
     fig.text(
-        0.5,
+        0.31,
         0.02,
         "Tamano de burbuja = cantidad de partidos",
         ha = "center",
@@ -644,7 +639,7 @@ def plot_analisis_10(df_team_match: pd.DataFrame):
     ax.set_title("Proporción de victorias, empates y derrotas por formación", loc = "left", pad = 15)
     ax.set_xlabel("Formación")
     ax.set_ylabel("Proporción de resultados")
-    ax.grid(axis = "y", linestyle = "--", alpha = 0.4)
+    ax.grid(axis = "y", linestyle = "--")
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
