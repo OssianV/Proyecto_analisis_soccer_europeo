@@ -8,7 +8,7 @@ Abstract: [PENDIENTE] - Poner un resumen del proyecto de un parrafo y pocas orac
 
 El repositorio contiene dos archivos relevante importantes: (1) Scripts principales, y (2) Libretas de Jupyter secundarias.
 
-La base de datos no esta en repositorio, para descargarla dirigase a en kaggle usando [este link.](https://www.kaggle.com/datasets/hugomathien/soccer) 
+La base de datos no esta en repositorio, para descargarla dirigase a en kaggle usando [este link.](https://www.kaggle.com/datasets/hugomathien/soccer). La base de datos tiene que estar en la carpeta `INPUTS`.
 
 ### Scripts principales
 
