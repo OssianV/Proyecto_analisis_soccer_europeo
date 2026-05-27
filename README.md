@@ -1,54 +1,77 @@
-# Proyecto Analisis de Datos
+# Analitica para scouting en futbol europeo
 
----
+Proyecto de analisis de datos aplicado a scouting y toma de decisiones en futbol europeo. A partir de la [European Soccer Database](https://www.kaggle.com/datasets/hugomathien/soccer), utilize python, pandas y matplotlib para procesar datos historicos de jugadores y partidos, generar visualizaciones y producir una presentacion ejecutiva con hallazgos accionables.
 
-Abstract: [PENDIENTE] - Poner un resumen del proyecto de un parrafo y pocas oraciones.
+El foco del proyecto esta en responder preguntas utiles para un cuerpo tecnico o area de scouting: que atributos conviene priorizar al evaluar talento, cuanto margen de desarrollo tienen los jugadores jovenes, a que edad suelen alcanzar su mejor nivel y que formaciones equilibran mejor uso y rendimiento.
 
-## Estructura del proyecto
+## Resultado principal
 
-El repositorio contiene dos archivos relevante importantes: (1) Scripts principales, y (2) Libretas de Jupyter secundarias.
+- Presentacion final: [OUTPUTS/presentacion_final.pptx](OUTPUTS/presentacion_final.pptx)
 
-La base de datos no esta en repositorio, para descargarla dirigase a en kaggle usando [este link.](https://www.kaggle.com/datasets/hugomathien/soccer). La base de datos tiene que estar en la carpeta `INPUTS`.
+Si quieres ver el proyecto rapidamente, ese archivo resume los analisis, graficos e interpretaciones principales.
 
-### Scripts principales
+## Hallazgos que resume el proyecto
 
-- [main.py](SCRIPTS/main.py)
-- [plots.py](SCRIPTS/plots.py)
-- [data_processing.py](SCRIPTS/data_processing.py)
+- Existen bloques de atributos altamente correlacionados en jugadores de campo, lo que permite simplificar criterios de scouting sin perder demasiada informacion.
+- En porteros tambien aparecen atributos redundantes, por lo que la evaluacion puede concentrarse en menos indicadores clave.
+- Los jugadores jovenes presentan distribuciones de crecimiento potencial que ayudan a distinguir perfiles prometedores de mejoras mas normales dentro del mercado.
+- El rendimiento promedio por edad sugiere una etapa de crecimiento, una meseta de prime y una fase de declive que puede orientar decisiones de fichaje.
+- Algunas formaciones muestran un mejor equilibrio entre frecuencia de uso y diferencia de gol, lo que aporta contexto tactico para interpretar resultados.
 
-Solo se tiene que ejectuar main.py. Este generara la presentacion final en la carpeta OUTPUTS.
+## Stack y enfoque tecnico
 
-Notese que se realizo con la version 3.13.1 de python. Tambien asegurese de tener las librerias utilizadas instaladas. Estas deben ser:
+- Python 3.13.1
+- pandas y numpy para limpieza, transformacion y analisis
+- matplotlib y seaborn para visualizacion
+- python-pptx para generar la presentacion final
+- SQLite como fuente original de datos
 
-- pandas
-- numpy
-- matplotlib
-- seaborn
-- python-pptx
+El flujo principal del proyecto esta dividido en tres modulos:
 
-### Libretas de Jupyter secundarias
+- [SCRIPTS/data_processing.py](SCRIPTS/data_processing.py): limpieza, estandarizacion e imputacion de datos, ademas de construccion de dataframes analiticos.
+- [SCRIPTS/plots.py](SCRIPTS/plots.py): generación de graficos para cada analisis.
+- [SCRIPTS/main.py](SCRIPTS/main.py): generación de la presentacion final a partir de los graficos, y analisis hechos manualmente.
 
-- [Libreta_sqlite_basics](SCRIPTS/Libreta_sqlite_basics.ipynb): Libreta con un tutorial basico de como leer las tablas del archivo .sqlite y pasarlas a un dataframe + un poco de teoria
-- [Libreta_resumen_bd](SCRIPTS/Libreta_resumen_bd.ipynb): Libreta resumen de la base de datos, explicando que informacion contiene cada columna.
-- [Libreta_graficos_y_analisis](SCRIPTS/Libreta_graficos_y_analisis.ipynb): Libreta donde se hicieron los 10 analisis y sus graficos.
-- [Libreta_planteamiento_de_insights](SCRIPTS/Libreta_planteamiento_de_insights.ipynb): Libreta donde se plantearon los insights a realizar.
-- [Libreta_procesamiento_de_datos](SCRIPTS/Libreta_procesamiento_de_datos.ipynb): Libreta donde se hizo todo el procesado de datos.
+## Estructura del repositorio
 
+- [INPUTS](INPUTS): carpeta esperada para el archivo `database.sqlite` descargado manualmente.
+- [SCRIPTS](SCRIPTS): codigo principal del pipeline.
+- [NOTEBOOKS](NOTEBOOKS): libretas de apoyo usadas durante la exploracion, documentacion y desarrollo del analisis.
+- [OUTPUTS](OUTPUTS): artefactos generados; el unico y principal es la presentacion final.
+- [ATTACHMENTS](ATTACHMENTS): carpeta reservada para recursos auxiliares del proyecto (actualmente vacia).
 
-## Direccion del analisis
+## Como ejecutar el proyecto
 
-La direccion de analisis es la de obtener insights relevantes que podamos dar a un director tecnico o al personal que se encarga de hacer scouting de un equipo de futbol europeo.
+1. Descarga la base de datos desde Kaggle: [European Soccer Database](https://www.kaggle.com/datasets/hugomathien/soccer).
+2. Coloca el archivo `database.sqlite` dentro de [INPUTS](INPUTS).
+3. Instala las dependencias necesarias.
+4. Ejecuta el script principal.
 
-Nos centraremos en analizar y generar sugerencias del tipo de jugador a scoutear, de las formacion a usar, de las mejores formas de identificar un jugador valioso, de los atributos de jugadores que mayor impacto tienen en ganar un partido, etc. El analisis entonces podra incluir observaciones hechas a travez de las diferentes ligas que se incluyen en el dataset.
+```bash
+pip install pandas numpy matplotlib seaborn python-pptx
+python SCRIPTS/main.py
+```
 
-## Tutoriales, articulos, documentacion relevante
+Al finalizar, el script genera o reemplaza [OUTPUTS/presentacion_final.pptx](OUTPUTS/presentacion_final.pptx).
 
-- La base de datos en kaggle es [esta](https://www.kaggle.com/datasets/hugomathien/soccer)
-- Si no saben usar github y git, yo aprendi lo superbasico usando [esta lista de reproduccion](https://www.youtube.com/watch?v=BCQHnlnPusY&list=PLRqwX-V7Uu6ZF9C0YMKuns9sLDzK6zoiV). Alternativamente, pueden usar los propios [tutoriales de github](https://docs.github.com/en/get-started/start-your-journey/hello-world). O solo preguntenle a un LLM.
-- Para que aprendan a usar la funcion de "issues", solo vean [este video](https://www.youtube.com/watch?v=WMykv2ZMyEQ&list=PLRqwX-V7Uu6ZF9C0YMKuns9sLDzK6zoiV&index=4)
-- Como la base de datos es un archivo .sqlite, para aprender lo basico de sqlite yo estoy usando [este recurso](https://www.sqlitetutorial.net/)
+## Material complementario
 
+Las libretas en [NOTEBOOKS](NOTEBOOKS) quedan como respaldo del proceso exploratorio. La mas util para revisar el desarrollo analitico de los hallazgos es [NOTEBOOKS/Libreta_graficos_y_analisis.ipynb](NOTEBOOKS/Libreta_graficos_y_analisis.ipynb) y [NOTEBOOKS/Libreta_procesamiento_de_datos.ipynb](NOTEBOOKS/Libreta_procesamiento_de_datos.ipynb).
 
-Extras:
-- Lo basico de pandas lo pueden encontrar [aqui](https://pandas.pydata.org/docs/user_guide/index.html)
-- Para que entiendan como funciona la programacion modular vean [este short](https://www.youtube.com/shorts/Ju6tP03GI7c). Para que vean como se veria un modulo creado por ustedes muy sencillo vean [este video](https://www.youtube.com/watch?v=cgxEqlGJcrY). Cuando yo he usado modulos siempre defino clases, y funciones dentro de clases; si puueden hagan lo mismo, aunque como se ve en el ultimo video esto no es necesario.
+## Limitaciones del analisis
+
+- La base cubre un periodo historico y no representa futbol actual.
+- Parte importante de los atributos de jugadores proviene de valoraciones usadas en FIFA, por lo que sirven mejor como aproximación analitica que como verdad observacional absoluta.
+- El objetivo del proyecto es exploratorio y de apoyo a decision, no construir un modelo predictivo definitivo de rendimiento.
+
+## Pendientes a mejorar
+
+- Limpiar scripts principales y mejorar pipeline.
+- Realizar un analisis mas exhaustivo.
+- Mejorar el control de excepciones.
+
+## Autor
+
+Ossian Ramirez
+
+Proyecto desarrollado originalmente en un contexto academico y reorganizado como pieza de portafolio.
